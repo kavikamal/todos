@@ -14,7 +14,7 @@ class TodoApp extends React.Component {
     return (  
       <div class="todoapp">
         {console.log(this.state.todos)}
-        <h3>TODO</h3>
+        <h1>todos</h1>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="new-todo">
             What needs to be done?
@@ -24,9 +24,9 @@ class TodoApp extends React.Component {
             onChange={this.handleChange}
             value={this.state.text}
           />
-          <button>
+          {/* <button>
             Add #{this.state.todos.length + 1}
-          </button>
+          </button> */}
         </form>
         <TodoList todos={this.state.todos} />
       </div>
