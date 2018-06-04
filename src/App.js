@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import todoList from './todos.json';
  
-class TodoApp extends React.Component {
+class TodoApp extends Component {
   constructor(props) {
     super(props);
     this.state = { todos: todoList, text: '' };
@@ -12,24 +12,23 @@ class TodoApp extends React.Component {
 
   render() {
     return (  
-      <div class="todoapp">
-        {console.log(this.state.todos)}
-        <h1>todos</h1>
+      <div className="todoapp">
+			<header className="header">
+				<h1>todos</h1>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor="new-todo">
-            What needs to be done?
-          </label>
-          <input
-            id="new-todo" className="new-todo"
+	      <input
+            id="new-todo" className="new-todo" placeholder="What needs to be done?" autoFocus
             onChange={this.handleChange}
             value={this.state.text}
           />
-          {/* <button>
-            Add #{this.state.todos.length + 1}
-          </button> */}
-        </form>
-        <TodoList todos={this.state.todos} />
-      </div>
+        </form>  
+			</header>
+      <TodoList todos={this.state.todos} />
+			<footer className="footer">
+				<span className="todo-count"><strong>{this.state.todos.length}</strong> item(s) left</span>
+				<button className="clear-completed">Clear completed</button>
+			</footer>
+		</div>
     );
   }
 
@@ -57,17 +56,9 @@ class TodoApp extends React.Component {
   }
 }
 
-class TodoList extends React.Component {
+class TodoList extends Component {
 
-  handleChange({target}){
-    if (target.checked){
-       target.removeAttribute('checked');
-       target.parentNode.style.textDecoration = "line-through";
-    } else {
-       target.setAttribute('checked', true);
-       target.parentNode.style.textDecoration = "";
-    }
-}
+  
 
 // deleteTodo(id){
 //   const newTodoList = todoList.filter(function(el) {
@@ -81,17 +72,41 @@ class TodoList extends React.Component {
 // }
   render() {
     return (
+				
+      <div className="main">
       <ul className="todo-list" >
         {this.props.todos.map(todo => (
-          <li key={todo.id}>
-            {todo.completed ? <input type="checkbox" onClick={this.handleChange} checked/>:<input type="checkbox" onClick={this.handleChange}/>}
-            {todo.title}
-            <button className="close" >x</button>
-          </li>
+          <TodoItem completed={todo.completed} title={todo.title} id= {todo.id} ></TodoItem> 
         ))}
       </ul>
+      </div>
     );
   }
 }
 
+class TodoItem extends Component{
+  handleChange({target}){
+    if (target.checked){
+       target.setAttribute("checked",false);
+       target.parentNode.className="";
+    } else {
+       target.setAttribute('checked', true);
+       target.parentNode.className="completed";
+    }
+  }
+
+  render(){
+    return(
+      <React.Fragment>
+          <li className={this.props.completed? "completed":""}>
+                <div className="view">
+                <input id={this.props.id}className="toggle" type="checkbox" onChange={this.handleChange} checked={this.props.completed}/>
+                <label>{this.props.title}</label>
+                <button className="destroy"></button>
+              </div>
+            </li>
+      </React.Fragment>
+    );
+  }
+}
 export default TodoApp;
